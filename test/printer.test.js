@@ -1,6 +1,16 @@
 const Printer = require("../lib/printer");
 
 describe("Printer class", () => {
+  let mock_coffee;
+  let mock_muffin;
+  let basket;
+
+  beforeEach(() => {
+    mock_muffin = { name: "Muffin", price: 20 };
+    mock_coffee = { name: "Coffee", price: 10.45 };
+    basket = [mock_coffee, mock_coffee, mock_muffin];
+  });
+
   it("prints the headers", () => {
     const shopTag = {
       shopName: "The Coffee Connection",
@@ -15,6 +25,13 @@ describe("Printer class", () => {
       "Address: 123 Lakeside Way",
       "Phone: 16503600708",
       "Order checkout: Thu Jul 20 2023 12:30:00",
+    ]);
+  });
+
+  it("prints customer names, order items, their quantities, and their regular prices", () => {
+    expect(Printer.basketList(basket)).toEqual([
+      "Coffee 2 x 10.45",
+      "Muffin 1 x 20",
     ]);
   });
 });
