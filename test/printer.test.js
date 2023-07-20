@@ -4,11 +4,20 @@ describe("Printer class", () => {
   let mock_coffee;
   let mock_muffin;
   let basket;
+  let tillObject;
 
   beforeEach(() => {
     mock_muffin = { name: "Muffin", price: 20 };
     mock_coffee = { name: "Coffee", price: 10.45 };
     basket = [mock_coffee, mock_coffee, mock_muffin];
+    tillObject = {
+      basketTotal: 42.35,
+      tax: 10.56,
+      change: 4.21,
+      discount: ["%5 on all muffins!", "%20 on all coffees"],
+      cash: 55,
+      currency: "$",
+    };
   });
 
   it("prints the headers", () => {
@@ -33,5 +42,9 @@ describe("Printer class", () => {
       "Coffee 2 x 10.45",
       "Muffin 1 x 20",
     ]);
+  });
+
+  it("prints the tax deductible from the order", () => {
+    expect(Printer.tax(tillObject)).toEqual("Tax: $10.56");
   });
 });
