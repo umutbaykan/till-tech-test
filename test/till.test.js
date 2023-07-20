@@ -45,4 +45,16 @@ describe("Till class", () => {
       expect(till.calculateTax()).toEqual(0);
     });
   });
+
+  describe("calculate change method", () => {
+    test("returns the change customer will get", () => {
+      const till = new Till([mock_coffee, mock_muffin]);
+      expect(till.calculateChange(50)).toEqual(16.03);
+    });
+
+    test("throws an error if the amount is less than total", () => {
+      const till = new Till([mock_coffee, mock_muffin]);
+      expect(() => till.calculateChange(30)).toThrow("Insufficient funds.");
+    });
+  });
 });
