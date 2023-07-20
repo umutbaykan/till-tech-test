@@ -6,8 +6,10 @@ describe("Printer class", () => {
   let basket;
   let tillObject;
   let shopTag;
+  let currentDate;
 
   beforeEach(() => {
+    currentDate = new Date().toString().slice(0, 24);
     shopTag = {
       shopName: "The Coffee Connection",
       address: "123 Lakeside Way",
@@ -39,14 +41,13 @@ describe("Printer class", () => {
   });
 
   it("prints the headers on current date", () => {
-    const currentDate = new Date().toString().slice(0, 24)
     expect(Printer.headers(shopTag)).toEqual([
       "Thank you for shopping at The Coffee Connection",
       "Address: 123 Lakeside Way",
       "Phone: 16503600708",
       `Order checkout: ${currentDate}`,
     ]);
-  })
+  });
 
   it("prints customer names, order items, their quantities, and their regular prices", () => {
     expect(Printer.basketList(basket)).toEqual([
@@ -57,6 +58,22 @@ describe("Printer class", () => {
 
   it("prints all the payment calculations of the order", () => {
     expect(Printer.receipt(tillObject)).toEqual([
+      "Discount: 5% from $42.35",
+      "Tax: $10.56",
+      "Total: $50.79",
+      "Cash: $55",
+      "Change: $4.21",
+    ]);
+  });
+
+  it("prints everything in one function", () => {
+    expect(Printer.printFullInvoice(shopTag, basket, tillObject)).toEqual([
+      "Thank you for shopping at The Coffee Connection",
+      "Address: 123 Lakeside Way",
+      "Phone: 16503600708",
+      `Order checkout: ${currentDate}`,
+      "Coffee 2 x 10.45",
+      "Muffin 1 x 20",
       "Discount: 5% from $42.35",
       "Tax: $10.56",
       "Total: $50.79",
