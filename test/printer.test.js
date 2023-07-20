@@ -14,9 +14,10 @@ describe("Printer class", () => {
       basketTotal: 42.35,
       tax: 10.56,
       change: 4.21,
-      discount: ["%5 on all muffins!", "%20 on all coffees"],
+      discount: 5,
       cash: 55,
       currency: "$",
+      grandTotal: 50.79,
     };
   });
 
@@ -44,7 +45,13 @@ describe("Printer class", () => {
     ]);
   });
 
-  it("prints the tax deductible from the order", () => {
-    expect(Printer.tax(tillObject)).toEqual("Tax: $10.56");
+  it("prints all the payment calculations of the order", () => {
+    expect(Printer.receipt(tillObject)).toEqual([
+      "Discount: 5% from $42.35",
+      "Tax: $10.56",
+      "Total: $50.79",
+      "Cash: $55",
+      "Change: $4.21",
+    ]);
   });
 });
