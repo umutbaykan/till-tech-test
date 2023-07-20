@@ -31,6 +31,18 @@ describe("Till class", () => {
     test("returns 0 if nothing is in basket", () => {
       const till = new Till();
       expect(till.calculateTotal()).toEqual(0);
-    })
+    });
+  });
+
+  describe("calculate tax method", () => {
+    test("calculates the total tax of items in the basket before reductions", () => {
+      const till = new Till([mock_coffee, mock_muffin]);
+      expect(till.calculateTax()).toEqual(3.52);
+    });
+
+    test("returns 0 if nothing is in basket", () => {
+      const till = new Till();
+      expect(till.calculateTax()).toEqual(0);
+    });
   });
 });
