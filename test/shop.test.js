@@ -3,6 +3,8 @@ const Item = require("..//lib/item");
 const Till = require("../lib/till");
 const Printer = require("../lib/printer");
 const Discount = require("../lib/discount");
+const rawJson = require("../samples.json");
+const jsonData = rawJson[0];
 
 describe("Shop class", () => {
   let coffee;
@@ -52,6 +54,7 @@ describe("Shop class", () => {
       {},
       basket,
       Till,
+      Item,
       Printer,
       [percentage5Discount],
       18,
@@ -60,6 +63,7 @@ describe("Shop class", () => {
     );
     expect(shop.basket).toEqual(basket);
     expect(shop.till).toEqual(Till);
+    expect(shop.item).toEqual(Item);
     expect(shop.printer).toEqual(Printer);
     expect(shop.discounts).toEqual([percentage5Discount]);
     expect(shop.taxRate).toEqual(18);
@@ -73,5 +77,29 @@ describe("Shop class", () => {
     const { shopName, address, phone } = shopTag;
     shop.updateShopTag(shopName, address, phone);
     expect(shop.shopTag).toEqual(shopTag);
+  });
+
+  test("updateAvailableItems creates item instances from json data and sets class availableItems property", () => {
+    const shop = new Shop();
+    shop.item = Item;
+    shop.updateAvailableItems(jsonData.prices);
+    expect(Object.keys(shop.availableItems).length).toEqual(15);
+    const itemObject = shop.availableItems["Cafe Latte"];
+    expect(itemObject instanceof Item).toEqual(true);
+    expect(itemObject.name).toEqual("Cafe Latte");
+    expect(itemObject.price).toEqual(4.75);
+    expect(itemObject.discount).toEqual(null);
+  });
+
+  test("updateShopDataFromJson updates the shop tag and available item list", () => {
+    const shop = new Shop();
+    shop.item = Item;
+    shop.updateShopDataFromJson(jsonData);
+    expect(shop.shopTag).toEqual(shopTag);
+    expect(Object.keys(shop.availableItems).length).toEqual(15);
+    const chocMudcake = shop.availableItems["Choc Mudcake"];
+    expect(chocMudcake.name).toEqual("Choc Mudcake");
+    expect(chocMudcake.price).toEqual(6.4);
+    expect(chocMudcake.discount).toEqual(null);
   });
 });
