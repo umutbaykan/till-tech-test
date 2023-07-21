@@ -44,4 +44,10 @@ describe("Till class", () => {
       ).toThrow("Insufficient funds.");
     });
   });
+
+  // describe("calculate discount method", () => {
+  //   test("", () => {
+
+  //   })
+  // })
 });
