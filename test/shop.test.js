@@ -102,4 +102,28 @@ describe("Shop class", () => {
     expect(chocMudcake.price).toEqual(6.4);
     expect(chocMudcake.discount).toEqual(null);
   });
+
+  test("setTaxRate method sets the tax rate to given input", () => {
+    const shop = new Shop();
+    expect(shop.taxRate).toEqual(15);
+    shop.setTaxRate(18);
+    expect(shop.taxRate).toEqual(18);
+  });
+
+  test("throws an error if tax rate input is not numeric", () => {
+    const shop = new Shop();
+    expect(() => shop.setTaxRate("15")).toThrow("Input must be numeric");
+  });
+
+  test("setCurrency method sets the currency symbol based on input", () => {
+    const shop = new Shop();
+    expect(shop.currency).toEqual("$");
+    shop.setCurrency("GBP");
+    expect(shop.currency).toEqual("£");
+  });
+
+  test("throws an error if currency input is not valid", () => {
+    const shop = new Shop();
+    expect(() => shop.setCurrency("15")).toThrow("Invalid input");
+  });
 });
