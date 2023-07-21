@@ -121,15 +121,11 @@ describe("Till class", () => {
   });
 
   describe("calculate change method", () => {
-    // test("returns the change customer will get", () => {
-    //   expect(
-    //     Till.calculateChange([mockCoffee, mockMuffin], 50, 8.64),
-    //   ).toEqual(16.03);
-    // });
-    // test("throws an error if the amount is less than total", () => {
-    //   expect(() =>
-    //     Till.calculateChange([mockCoffee, mockMuffin], 30, 8.64),
-    //   ).toThrow("Insufficient funds.");
-    // });
+    test("returns the change customer will get", () => {
+      expect(Till.calculateChange(50, 45.5)).toEqual(4.5);
+    });
+    test("throws an error if the amount is less than total", () => {
+      expect(() => Till.calculateChange(4, 5)).toThrow("Insufficient funds.");
+    });
   });
 });
