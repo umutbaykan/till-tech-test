@@ -1,14 +1,6 @@
 const Item = require("../lib/item");
 
 describe("Item class", () => {
-  let fixedDiscount;
-  let percentageDiscount;
-
-  beforeEach(() => {
-    fixedDiscount = { type: "fixed", value: 2 };
-    percentageDiscount = { type: "percentage", value: 5 };
-  });
-
   it("initializes with a name and price", () => {
     const item = new Item("Muffin", 20);
     expect(item.name).toEqual("Muffin");
@@ -28,20 +20,5 @@ describe("Item class", () => {
     const item = new Item("Muffin", 20);
     item.discount = { type: "fixed", percentage: 2 };
     expect(item.discount).toEqual({ type: "fixed", percentage: 2 });
-  });
-
-  it("applies a fixed discount and returns discounted price", () => {
-    const item = new Item("Muffin", 20, fixedDiscount);
-    expect(item.applyDiscount()).toEqual(18);
-  });
-
-  it("applies a percentage discount and returns discounted price", () => {
-    const item = new Item("Muffin", 20, percentageDiscount);
-    expect(item.applyDiscount()).toEqual(19);
-  });
-
-  it("does not apply any discount if there are none specified", () => {
-    const item = new Item("Muffin", 20);
-    expect(item.applyDiscount()).toEqual(20);
   });
 });

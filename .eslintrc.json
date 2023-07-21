@@ -6,7 +6,9 @@
   },
   "extends": ["plugin:jest/recommended", "eslint:recommended"],
   "parserOptions": {
-    "ecmaVersion": "latest"
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
   },
   "rules": {}
 }
