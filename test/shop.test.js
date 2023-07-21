@@ -66,4 +66,12 @@ describe("Shop class", () => {
     expect(shop.currency).toEqual("£");
     expect(shop.shopTag).toEqual(shopTag);
   });
+
+  test("updateShopTag updates the shop class properties", () => {
+    const shop = new Shop();
+    expect(shop.shopTag).toEqual(undefined);
+    const { shopName, address, phone } = shopTag;
+    shop.updateShopTag(shopName, address, phone);
+    expect(shop.shopTag).toEqual(shopTag);
+  });
 });
