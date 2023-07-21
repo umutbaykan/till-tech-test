@@ -12,12 +12,12 @@ describe("Till class", () => {
   describe("calculate total method", () => {
     test("calculates the totals of the items in the basket", () => {
       expect(
-        Till.calculateTotal([mock_coffee, mock_muffin, mock_muffin]),
+        Till.calculateRawTotal([mock_coffee, mock_muffin, mock_muffin]),
       ).toEqual(50.45);
     });
 
     test("returns 0 if nothing is in basket", () => {
-      expect(Till.calculateTotal([])).toEqual(0);
+      expect(Till.calculateRawTotal([])).toEqual(0);
     });
   });
 
