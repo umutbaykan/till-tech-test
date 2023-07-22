@@ -126,4 +126,24 @@ describe("Shop class", () => {
     const shop = new Shop();
     expect(() => shop.setCurrency("15")).toThrow("Invalid input");
   });
+
+  describe("addOrder method", () => {
+    test("adds the order to the basket if the order is valid", () => {
+      const shop = new Shop();
+      shop.item = Item;
+      shop.updateShopDataFromJson(jsonData);
+      shop.addOrder("Cafe Latte");
+      expect(shop.basket.length).toEqual(1);
+      expect(shop.basket[0].name).toEqual("Cafe Latte");
+      expect(shop.basket[0] instanceof Item).toEqual(true);
+    });
+
+    test("throws an error if the order does not exist in available items", () => {
+      const shop = new Shop();
+      shop.item = Item;
+      shop.updateShopDataFromJson(jsonData);
+      expect(() => shop.addOrder("Cookie")).toThrow("Order invalid.");
+      expect(shop.basket.length).toEqual(0);
+    });
+  });
 });
