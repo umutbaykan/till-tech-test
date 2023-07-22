@@ -56,6 +56,7 @@ describe("Shop class", () => {
       Till,
       Item,
       Printer,
+      Discount,
       [percentage5Discount],
       18,
       "£",
@@ -65,6 +66,7 @@ describe("Shop class", () => {
     expect(shop.till).toEqual(Till);
     expect(shop.item).toEqual(Item);
     expect(shop.printer).toEqual(Printer);
+    expect(shop.discount).toEqual(Discount);
     expect(shop.discounts).toEqual([percentage5Discount]);
     expect(shop.taxRate).toEqual(18);
     expect(shop.currency).toEqual("£");
@@ -144,6 +146,53 @@ describe("Shop class", () => {
       shop.updateShopDataFromJson(jsonData);
       expect(() => shop.addOrder("Cookie")).toThrow("Order invalid.");
       expect(shop.basket.length).toEqual(0);
+    });
+
+    describe("addItemDiscount", () => {
+      test("adds a discount instance to an item", () => {
+        const shop = new Shop();
+        shop.item = Item;
+        shop.discount = Discount;
+        shop.updateShopDataFromJson(jsonData);
+        const cafeLatte = shop.availableItems["Cafe Latte"];
+        expect(cafeLatte.discount).toEqual(null);
+        shop.addItemDiscount(
+          "Cafe Latte",
+          "fixed",
+          3,
+          "3 dollars off cafe latte",
+        );
+        expect(cafeLatte.discount instanceof Discount).toEqual(true);
+        expect(cafeLatte.discount.type).toEqual("fixed");
+        expect(cafeLatte.discount.value).toEqual(3);
+        expect(cafeLatte.discount.description).toEqual(
+          "3 dollars off cafe latte",
+        );
+      });
+      test("adds discount to multiple items sharing same substring", () => {
+        const shop = new Shop();
+        shop.item = Item;
+        shop.discount = Discount;
+        shop.updateShopDataFromJson(jsonData);
+        shop.addItemDiscount(
+          "espresso",
+          "percentage",
+          10,
+          "10% off all espressos",
+        );
+        const singleEspresso = shop.availableItems["Single Espresso"];
+        const doubleEspresso = shop.availableItems["Double Espresso"];
+        expect(singleEspresso.discount instanceof Discount).toEqual(true);
+        expect(doubleEspresso.discount instanceof Discount).toEqual(true);
+      });
+      test("throws an error if the name does not match any item", () => {
+        const shop = new Shop();
+        shop.item = Item;
+        shop.discount = Discount;
+        expect(() =>
+          shop.addItemDiscount("Something", "fixed", 10, "10 dollars off"),
+        ).toThrow("Name does not match any item.");
+      });
     });
   });
 });
