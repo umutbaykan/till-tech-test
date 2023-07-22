@@ -134,8 +134,18 @@ describe("Shop class", () => {
       const shop = new Shop();
       shop.item = Item;
       shop.updateShopDataFromJson(jsonData);
-      shop.addOrder("Cafe Latte");
+      shop.addOrder("Cafe Latte", 1);
       expect(shop.basket.length).toEqual(1);
+      expect(shop.basket[0].name).toEqual("Cafe Latte");
+      expect(shop.basket[0] instanceof Item).toEqual(true);
+    });
+
+    test("can add multiple orders at once", () => {
+      const shop = new Shop();
+      shop.item = Item;
+      shop.updateShopDataFromJson(jsonData);
+      shop.addOrder("Cafe Latte", 3);
+      expect(shop.basket.length).toEqual(3);
       expect(shop.basket[0].name).toEqual("Cafe Latte");
       expect(shop.basket[0] instanceof Item).toEqual(true);
     });
@@ -144,7 +154,7 @@ describe("Shop class", () => {
       const shop = new Shop();
       shop.item = Item;
       shop.updateShopDataFromJson(jsonData);
-      expect(() => shop.addOrder("Cookie")).toThrow("Order invalid.");
+      expect(() => shop.addOrder("Cookie", 1)).toThrow("Order invalid.");
       expect(shop.basket.length).toEqual(0);
     });
 
