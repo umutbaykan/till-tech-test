@@ -194,5 +194,27 @@ describe("Shop class", () => {
         ).toThrow("Name does not match any item.");
       });
     });
+    describe("removeItemDiscount method", () => {
+      test("removes the discount from an item", () => {
+        const shop = new Shop();
+        shop.item = Item;
+        shop.discount = Discount;
+        shop.updateShopDataFromJson(jsonData);
+        shop.addItemDiscount(
+          "latte",
+          "percentage",
+          10,
+          "10% off all espressos",
+        );
+        shop.removeItemDiscount("latte");
+        expect(shop.availableItems["Cafe Latte"].discount).toEqual(null);
+      });
+      test("throws an error if the item name does not match anything in availableItems", () => {
+        const shop = new Shop();
+        expect(() => shop.removeItemDiscount("latte")).toThrow(
+          "Can't remove discount, name mismatch.",
+        );
+      });
+    });
   });
 });
