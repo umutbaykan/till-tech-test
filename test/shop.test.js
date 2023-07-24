@@ -214,6 +214,24 @@ describe("Shop class", () => {
         expect(basketDiscount.value).toEqual(10);
         expect(basketDiscount.type).toEqual("percentage");
       });
+
+      describe("removeBasketDiscount method", () => {
+        test("removes a basket discount that is already on the shop discounts", () => {
+          expect(shop.discounts.length).toEqual(0);
+          shop.addBasketDiscount(new tenPercentOffAfter50());
+          expect(shop.discounts.length).toEqual(1);
+          shop.removeBasketDiscount(
+            "10 Percent off if your basket cost is more than 50",
+          );
+          expect(shop.discounts.length).toEqual(0);
+        });
+
+        test("throws an error if discount description does not match", () => {
+          expect(() => shop.removeBasketDiscount("some discount")).toThrow(
+            "Can't remove discount, name mismatch.",
+          );
+        });
+      });
     });
   });
 });
