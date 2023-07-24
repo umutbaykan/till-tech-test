@@ -232,6 +232,50 @@ describe("Shop class", () => {
           );
         });
       });
+
+      describe("applyDiscounts method", () => {
+        test("drops the total price by discount fixed amount", () => {
+          shop.addBasketDiscount(fixed2Discount);
+          const appliedDiscount = shop.applyDiscounts(100);
+          expect(appliedDiscount.currentPrice).toEqual(98);
+          expect(appliedDiscount.appliedDiscounts[0]).toEqual(
+            "2 dollars off coffee",
+          );
+        });
+
+        test("drops the total price by discount object percentage", () => {
+          const discount = new Discount("percentage", 12, "drops 12 percent");
+          shop.addBasketDiscount(discount);
+          const appliedDiscount = shop.applyDiscounts(50);
+          expect(appliedDiscount.currentPrice).toEqual(44);
+          expect(appliedDiscount.appliedDiscounts[0]).toEqual(
+            "drops 12 percent",
+          );
+        });
+
+        test("applies consecutive fixed discounts accurately", () => {
+          shop.addBasketDiscount(fixed2Discount);
+          shop.addBasketDiscount(fixed2Discount);
+          const appliedDiscount = shop.applyDiscounts(10);
+          expect(appliedDiscount.currentPrice).toEqual(6);
+          expect(appliedDiscount.appliedDiscounts[1]).toEqual(
+            "2 dollars off coffee",
+          );
+        });
+
+        test("applies consecutive fixed and percentage discounts drops accurately", () => {
+          shop.addBasketDiscount(fixed2Discount);
+          shop.addBasketDiscount(percentage10Discount);
+          expect(shop.applyDiscounts(10).currentPrice).toEqual(7.2);
+        });
+
+        test("does not apply discount if applicable conditions are not met", () => {
+          shop.addBasketDiscount(percentage5Discount);
+          const appliedDiscount = shop.applyDiscounts(10);
+          expect(appliedDiscount.currentPrice).toEqual(10);
+          expect(appliedDiscount.appliedDiscounts.length).toEqual(0);
+        });
+      });
     });
   });
 });
