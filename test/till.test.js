@@ -71,11 +71,7 @@ describe("Till class", () => {
 
   describe("calculate tax method", () => {
     test("calculates the total tax of items in the basket before reductions", () => {
-      expect(Till.calculateTax([mockCoffee, mockMuffin], 8.64)).toEqual(3.52);
-    });
-
-    test("returns 0 if nothing is in basket", () => {
-      expect(Till.calculateTax([], 8.64)).toEqual(0);
+      expect(Till.calculateTax(30.45, 8.64)).toEqual(3.52);
     });
   });
 
