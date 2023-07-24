@@ -19,6 +19,8 @@ describe("Shop class", () => {
 
   let shopTag;
 
+  let shop;
+
   beforeEach(() => {
     fixed2Discount = new Discount("fixed", 2, "2 dollars off coffee");
     percentage10Discount = new Discount(
@@ -48,7 +50,20 @@ describe("Shop class", () => {
       address: "123 Lakeside Way",
       phone: "16503600708",
     };
+    shop = new Shop(
+      {},
+      [],
+      Till,
+      Item,
+      Printer,
+      Discount,
+      [],
+      8.64,
+      "$"
+    )
+    shop.updateShopDataFromJson(jsonData)
   });
+
   test("initializes", () => {
     const shop = new Shop(
       {},
@@ -82,9 +97,6 @@ describe("Shop class", () => {
   });
 
   test("updateAvailableItems creates item instances from json data and sets class availableItems property", () => {
-    const shop = new Shop();
-    shop.item = Item;
-    shop.updateAvailableItems(jsonData.prices);
     expect(Object.keys(shop.availableItems).length).toEqual(15);
     const itemObject = shop.availableItems["Cafe Latte"];
     expect(itemObject instanceof Item).toEqual(true);
@@ -94,9 +106,6 @@ describe("Shop class", () => {
   });
 
   test("updateShopDataFromJson updates the shop tag and available item list", () => {
-    const shop = new Shop();
-    shop.item = Item;
-    shop.updateShopDataFromJson(jsonData);
     expect(shop.shopTag).toEqual(shopTag);
     expect(Object.keys(shop.availableItems).length).toEqual(15);
     const chocMudcake = shop.availableItems["Choc Mudcake"];
@@ -106,34 +115,27 @@ describe("Shop class", () => {
   });
 
   test("setTaxRate method sets the tax rate to given input", () => {
-    const shop = new Shop();
-    expect(shop.taxRate).toEqual(15);
+    expect(shop.taxRate).toEqual(8.64);
     shop.setTaxRate(18);
     expect(shop.taxRate).toEqual(18);
   });
 
   test("throws an error if tax rate input is not numeric", () => {
-    const shop = new Shop();
     expect(() => shop.setTaxRate("15")).toThrow("Input must be numeric");
   });
 
   test("setCurrency method sets the currency symbol based on input", () => {
-    const shop = new Shop();
     expect(shop.currency).toEqual("$");
     shop.setCurrency("GBP");
     expect(shop.currency).toEqual("£");
   });
 
   test("throws an error if currency input is not valid", () => {
-    const shop = new Shop();
     expect(() => shop.setCurrency("15")).toThrow("Invalid input");
   });
 
   describe("addOrder method", () => {
     test("adds the order to the basket if the order is valid", () => {
-      const shop = new Shop();
-      shop.item = Item;
-      shop.updateShopDataFromJson(jsonData);
       shop.addOrder("Cafe Latte", 1);
       expect(shop.basket.length).toEqual(1);
       expect(shop.basket[0].name).toEqual("Cafe Latte");
@@ -141,9 +143,6 @@ describe("Shop class", () => {
     });
 
     test("can add multiple orders at once", () => {
-      const shop = new Shop();
-      shop.item = Item;
-      shop.updateShopDataFromJson(jsonData);
       shop.addOrder("Cafe Latte", 3);
       expect(shop.basket.length).toEqual(3);
       expect(shop.basket[0].name).toEqual("Cafe Latte");
@@ -151,19 +150,12 @@ describe("Shop class", () => {
     });
 
     test("throws an error if the order does not exist in available items", () => {
-      const shop = new Shop();
-      shop.item = Item;
-      shop.updateShopDataFromJson(jsonData);
       expect(() => shop.addOrder("Cookie", 1)).toThrow("Order invalid.");
       expect(shop.basket.length).toEqual(0);
     });
 
     describe("addItemDiscount", () => {
       test("adds a discount instance to an item", () => {
-        const shop = new Shop();
-        shop.item = Item;
-        shop.discount = Discount;
-        shop.updateShopDataFromJson(jsonData);
         const cafeLatte = shop.availableItems["Cafe Latte"];
         expect(cafeLatte.discount).toEqual(null);
         shop.addItemDiscount(
@@ -179,11 +171,8 @@ describe("Shop class", () => {
           "3 dollars off cafe latte",
         );
       });
+      
       test("adds discount to multiple items sharing same substring", () => {
-        const shop = new Shop();
-        shop.item = Item;
-        shop.discount = Discount;
-        shop.updateShopDataFromJson(jsonData);
         shop.addItemDiscount(
           "espresso",
           "percentage",
@@ -195,21 +184,16 @@ describe("Shop class", () => {
         expect(singleEspresso.discount instanceof Discount).toEqual(true);
         expect(doubleEspresso.discount instanceof Discount).toEqual(true);
       });
+
       test("throws an error if the name does not match any item", () => {
-        const shop = new Shop();
-        shop.item = Item;
-        shop.discount = Discount;
         expect(() =>
           shop.addItemDiscount("Something", "fixed", 10, "10 dollars off"),
         ).toThrow("Name does not match any item.");
       });
     });
+
     describe("removeItemDiscount method", () => {
       test("removes the discount from an item", () => {
-        const shop = new Shop();
-        shop.item = Item;
-        shop.discount = Discount;
-        shop.updateShopDataFromJson(jsonData);
         shop.addItemDiscount(
           "latte",
           "percentage",
@@ -219,9 +203,9 @@ describe("Shop class", () => {
         shop.removeItemDiscount("latte");
         expect(shop.availableItems["Cafe Latte"].discount).toEqual(null);
       });
+
       test("throws an error if the item name does not match anything in availableItems", () => {
-        const shop = new Shop();
-        expect(() => shop.removeItemDiscount("latte")).toThrow(
+        expect(() => shop.removeItemDiscount("cookie")).toThrow(
           "Can't remove discount, name mismatch.",
         );
       });
