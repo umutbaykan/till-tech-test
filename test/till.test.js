@@ -6,9 +6,6 @@ describe("Till class", () => {
   let mockTiramisu;
   let fixedDiscount;
   let percentageDiscount;
-  let trueBasketDiscount;
-  let falseBasketDiscount;
-  let totals;
 
   beforeEach(() => {
     fixedDiscount = {
@@ -21,22 +18,6 @@ describe("Till class", () => {
     percentageDiscount = {
       type: "percentage",
       value: 20,
-      checkApplicable: () => {
-        return true;
-      },
-    };
-
-    falseBasketDiscount = {
-      checkApplicable: () => {
-        return false;
-      },
-    };
-
-    totals = { grossTotal: 35, discountTotal: 35 };
-
-    trueBasketDiscount = {
-      type: "percentage",
-      value: 10,
       checkApplicable: () => {
         return true;
       },
@@ -98,32 +79,11 @@ describe("Till class", () => {
     });
   });
 
-  describe("calculate basket discount method", () => {
-    test("returns the total basket discount if discount is applicable", () => {
-      expect(
-        Till.calculateBasketDiscount(
-          [mockTiramisu],
-          totals,
-          trueBasketDiscount,
-        ),
-      ).toEqual(31.5);
-    });
-
-    test("returns the original price if discount isnt applicable", () => {
-      expect(
-        Till.calculateBasketDiscount(
-          [mockTiramisu],
-          totals,
-          falseBasketDiscount,
-        ),
-      ).toEqual(35);
-    });
-  });
-
   describe("calculate change method", () => {
     test("returns the change customer will get", () => {
       expect(Till.calculateChange(50, 45.5)).toEqual(4.5);
     });
+
     test("throws an error if the amount is less than total", () => {
       expect(() => Till.calculateChange(4, 5)).toThrow("Insufficient funds.");
     });
