@@ -3,6 +3,7 @@ const Item = require("..//lib/item");
 const Till = require("../lib/till");
 const Printer = require("../lib/printer");
 const Discount = require("../lib/discount");
+const tenPercentOffAfter50 = require("../lib/discounts/tenPercentOffAfter50");
 const rawJson = require("../samples.json");
 const jsonData = rawJson[0];
 
@@ -50,18 +51,8 @@ describe("Shop class", () => {
       address: "123 Lakeside Way",
       phone: "16503600708",
     };
-    shop = new Shop(
-      {},
-      [],
-      Till,
-      Item,
-      Printer,
-      Discount,
-      [],
-      8.64,
-      "$"
-    )
-    shop.updateShopDataFromJson(jsonData)
+    shop = new Shop({}, [], Till, Item, Printer, Discount, [], 8.64, "$");
+    shop.updateShopDataFromJson(jsonData);
   });
 
   test("initializes", () => {
@@ -171,7 +162,7 @@ describe("Shop class", () => {
           "3 dollars off cafe latte",
         );
       });
-      
+
       test("adds discount to multiple items sharing same substring", () => {
         shop.addItemDiscount(
           "espresso",
@@ -208,6 +199,20 @@ describe("Shop class", () => {
         expect(() => shop.removeItemDiscount("cookie")).toThrow(
           "Can't remove discount, name mismatch.",
         );
+      });
+    });
+
+    describe("addBasketDiscount method", () => {
+      test("adds a basket discount that is applied on meeting the condition", () => {
+        const tenOff = new tenPercentOffAfter50();
+        shop.addBasketDiscount(tenOff);
+        const basketDiscount = shop.discounts[0];
+        expect(basketDiscount instanceof Discount).toEqual(true);
+        expect(basketDiscount.description).toEqual(
+          "10 Percent off if your basket cost is more than 50",
+        );
+        expect(basketDiscount.value).toEqual(10);
+        expect(basketDiscount.type).toEqual("percentage");
       });
     });
   });
